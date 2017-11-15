@@ -1,0 +1,20 @@
+body {
+	background: url(https://images.unsplash.com/photo-1510174210589-ed6667381173?auto=format&fit=crop&w=666&q=60&ixid=dW5zcGxhc2guY29tOzs7Ozs%3D);
+	background-size: cover;
+	font-family: 'Barlow Condensed', sans-serif;
+	background-position: center;
+}
+
+html {
+	height: 100%;
+}
+
+#content {
+	text-align: center;
+	padding-top: 25%;
+}
+
+h1, h3 {
+	font-weight: 700;
+	color: black;
+}
