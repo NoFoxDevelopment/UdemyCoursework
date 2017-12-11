@@ -11,13 +11,21 @@ app.get('/', function(req, res) {
 //where * = cow => "The cow says 'Moo'"
 //where * = dog => "The dog says 'Woof'"
 app.get('/speak/:anim', function(req, res) {
-    var animal = req.params.anim;
-    var saying = "";
+    var sounds = {
+        pig: "'Oink'.",
+        cow: "'Moo'.",
+        dog: "'Woof'.",
+        cat: "'Meow'.",
+        goldfish: "'...'."
+    };
+
+    var animal = req.params.anim.toLowerCase();
+    var sound = sounds[animal];
     var err = false;
 
-    animal === 'pig' ? saying = "'Oink'." : animal === 'cow' ? saying = "'Moo'." : animal === 'dog' ? saying = "'Woof'." : err = true;
+    //animal === 'pig' ? saying = "'Oink'." : animal === 'cow' ? saying = "'Moo'." : animal === 'dog' ? saying = "'Woof'." : err = true;
 
-    !err ? res.send('The ' + animal + ' says: ' + saying) : res.send('Sorry, that animal is not supported in this version.');
+    sounds.hasOwnProperty(animal.toString()) ? res.send('The ' + animal + ' says: ' + sound) : res.send('Sorry, that animal is not supported in this version.');
 })
 
 // /repeat/*/# should print * # of times.

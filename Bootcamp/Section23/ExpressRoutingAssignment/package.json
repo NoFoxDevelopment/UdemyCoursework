@@ -1,6 +1,6 @@
 {
   "name": "express_routing_assignment",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "For Udemy Course",
   "main": "app.js",
   "scripts": {
@@ -10,5 +10,14 @@
   "license": "ISC",
   "dependencies": {
     "express": "^4.16.2"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/NoFoxDevelopment/UdemyCoursework.git"
+  },
+  "bugs": {
+    "url": "https://github.com/NoFoxDevelopment/UdemyCoursework/issues"
+  },
+  "homepage": "https://github.com/NoFoxDevelopment/UdemyCoursework#readme"
 }
