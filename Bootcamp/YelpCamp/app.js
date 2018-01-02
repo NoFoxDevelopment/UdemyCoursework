@@ -1,53 +1,72 @@
-/**************************************************
-***            TO BE MOVED TO DB                ***
-**************************************************/
+const 	express 	= require('express'),
+		app 		= express(),
+		bodyParser 	= require('body-parser'),
+		mongoose 	= require('mongoose');
 
-var campgrounds = [
-		{name: 'Salmon Creek', image:'https://cdn.pixabay.com/photo/2017/10/07/01/01/bach-leek-2825197__340.jpg'},
-		{name: 'Running Elk', image:'https://cdn.pixabay.com/photo/2016/09/18/18/18/tent-camping-1678714__340.jpg'},
-		{name: 'Caboose Lake', image:'https://cdn.pixabay.com/photo/2016/02/18/22/16/tent-1208201__340.jpg'},
-		{name: 'Krat Hills', image:'https://cdn.pixabay.com/photo/2015/09/14/13/57/campground-939588__340.jpg'},
-		{name: 'Stony Point', image:'https://cdn.pixabay.com/photo/2017/08/04/20/04/camping-2581242__340.jpg'},
-		{name: 'Woodenfrog', image:'https://cdn.pixabay.com/photo/2017/04/05/01/11/bridge-2203661__340.jpg'},
-		{name: 'Buck Pond', image:'https://cdn.pixabay.com/photo/2016/08/28/17/05/camping-1626412__340.jpg'},
-		{name: 'Hearthstone Point', image:'https://cdn.pixabay.com/photo/2017/09/26/13/50/rv-2788677__340.jpg'},
-		{name: 'Devil\'s Tombstone', image:'https://cdn.pixabay.com/photo/2015/07/10/17/24/night-839807__340.jpg'},
-		{name: 'Beaverkill', image:'https://cdn.pixabay.com/photo/2017/08/07/15/35/travel-2604981__340.jpg'}
-	];
-
-/******************************************************
-****                START APP CODE                 ****
-******************************************************/
-
-var express = require('express');
-var app = express();
-var bodyParser = require('body-parser');
-
+mongoose.connect('mongodb://localhost/yelpCamp', { useMongoClient: true });
+mongoose.Promise = global.Promise;
 app.use(bodyParser.urlencoded({extended: true}));
 app.set('view engine', 'ejs');
 
+//SCHEMA SETUP
+var campgroundSchema = new mongoose.Schema({
+	name: 			String,
+	image: 			String,
+	description: 	String
+});
+
+var Campground = mongoose.model('Campground', campgroundSchema);
+
 app.get('/', function(req, res){
-	res.render('index.ejs');
+	res.redirect('/campgrounds');
+	//res.render('home');
 });
 
+// INDEX - Display all CGs
 app.get('/campgrounds', function(req, res){
-	res.render('campgrounds', {campgrounds: campgrounds});
+	Campground.find({}, function(err, allCampgrounds) {
+		err ? console.log(err) : res.render('index', {campgrounds:allCampgrounds});
+	})
 });
 
+// NEW - Display form to add new CG
 app.get('/campgrounds/new', function(req, res){
 	res.render('new');
 });
 
+// CREATE - Add new CG to DB
 app.post('/campgrounds', function(req, res){
 	// get data from form and add to campgrounds array
 	var name = req.body.name;
 	var image = req.body.image;
-	var newCampground = {name: name, image: image};
-	campgrounds.push(newCampground);
-	//redirect to campgrounds page (get)
-	res.redirect('/campgrounds');
+	var desc = req.body.description;
+	var newCampground = {name: name, image: image, description: desc};
+	// Create a new campground and save to db
+	Campground.create(newCampground, function(error, newCG){
+		error ? console.log(err) : res.redirect('/campgrounds');
+	});
+});
+
+//SHOW - Show more info about one CG
+app.get('/campgrounds/:id', function(req, res){
+	//find the campground with provided id
+	Campground.findById(req.params.id, function(err, foundCG){
+		err ? console.log(err) : res.render('show', {campground: foundCG});
+	});
 });
 
 app.listen(3000, function(){
 	console.log('YelpCamp being served on port 3000');
 });
+
+/************************************************************************************************
+* Name 			Path 					HTTP Verb 	Purpose 									*
+*===============================================================================================*
+* Index 		/campgrounds 			GET 		List all CGs 								*
+* New 			/campgrounds/new 		GET 		Show new CG form 							*
+*  -Create 		/campgrounds 			POST 		Add new CG to DB, then redir to that CG 	*
+* Show 			/campgrounds/:id 		GET 		Show info about one CG 						*
+* Edit			/campgrounds/:id/edit 	GET 		Show edit form for one CG 					*
+*  -Update 		/campgrounds/:id 		PUT 		Update CG in DB, then redir to that CG 		*
+* Destroy		/campgrounds/:id 		DELETE		Delete CG, then redir to Index 				*
+************************************************************************************************/
