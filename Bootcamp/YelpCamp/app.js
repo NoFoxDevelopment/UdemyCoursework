@@ -59,14 +59,20 @@ app.listen(3000, function(){
 	console.log('YelpCamp being served on port 3000');
 });
 
-/************************************************************************************************
-* Name 			Path 					HTTP Verb 	Purpose 									*
-*===============================================================================================*
-* Index 		/campgrounds 			GET 		List all CGs 								*
-* New 			/campgrounds/new 		GET 		Show new CG form 							*
-*  -Create 		/campgrounds 			POST 		Add new CG to DB, then redir to that CG 	*
-* Show 			/campgrounds/:id 		GET 		Show info about one CG 						*
-* Edit			/campgrounds/:id/edit 	GET 		Show edit form for one CG 					*
-*  -Update 		/campgrounds/:id 		PUT 		Update CG in DB, then redir to that CG 		*
-* Destroy		/campgrounds/:id 		DELETE		Delete CG, then redir to Index 				*
-************************************************************************************************/
+/****************************************************************************************************************************
+* Name 			| Path 					| HTTP Verb | Purpose 									| mongoose method 			*
+*===========================================================================================================================*
+* Index 		| /campgrounds 			| GET 		| List all CGs 								| Campground.find()			*
+*---------------------------------------------------------------------------------------------------------------------------*
+* New 			| /campgrounds/new 		| GET 		| Show new CG form 							| n/a 						*
+*---------------------------------------------------------------------------------------------------------------------------*
+*  ↳ Create 	| /campgrounds 			| POST 		| Add new CG to DB, then redir to that CG 	| Dog.create() 				*
+*---------------------------------------------------------------------------------------------------------------------------*
+* Show 			| /campgrounds/:id 		| GET 		| Show info about one CG 					| Dog.findById() 			*
+*---------------------------------------------------------------------------------------------------------------------------*
+* Edit			| /campgrounds/:id/edit | GET 		| Show edit form for one CG 				| Dog.findById() 			*
+*---------------------------------------------------------------------------------------------------------------------------*
+*  ↳ Update 	| /campgrounds/:id 		| PUT 		| Update CG in DB, then redir to that CG 	| Dog.findByIdAndUpdate() 	*
+*---------------------------------------------------------------------------------------------------------------------------*
+* Destroy		| /campgrounds/:id 		| DELETE	| Delete CG, then redir to Index 			| Dog.findByIdAndRemove() 	*
+****************************************************************************************************************************/
